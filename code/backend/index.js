@@ -24,7 +24,6 @@ app.get('/', (req, res) => {
 connectMongoDB().then(() => console.log("MongoDB connected")).catch(err => console.log(err));
 
 async function connectMongoDB() {
-  // await mongoose.connect('mongodb+srv://ITPDB:ITPDB@cluster0.zbkw8pu.mongodb.net/?retryWrites=true&w=majority');
   await mongoose.connect(process.env.MONGO_DB_URI);
 }
 

@@ -24,7 +24,7 @@ const SignUp = () => {
           <label className="btn btn-outline-success w-100 m-1" htmlFor='service-log'>Freelancer</label>
         </div>
       </div >
-      <div className='container-fluid text-dark mx-auto' style={{ maxWidth: '60em' }} >
+      <div className='container-fluid text-dark mx-auto' style={{ minWidth: '30em' }} >
         {loginMode === login.customer && <CreateUser />}
         {loginMode === login.freelancer && <ServiceSignUp />}
       </div>

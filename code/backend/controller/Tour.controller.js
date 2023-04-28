@@ -1,9 +1,64 @@
 const Tour = require('../model/Tour.model');
+const cloudinary = require('cloudinary').v2
+const uuid = require('uuid').v4
+
+// Configuration 
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 //Create new ticket 
 const createTour = async (req, res) => {
+    async function uploadToCloudinary(fileList) {
+        if (!fileList) return
+
+        if (Array.isArray(fileList)) {
+            const imgIdArray = await Promise.all(
+                fileList.map(file => {
+                    return new Promise((resolve, reject) => {
+                        const randId = uuid()
+                        cloudinary.uploader.upload(file, { public_id: randId })
+                            .then(dat => {
+                                console.log('uploaded', randId)
+                                resolve(dat.public_id)
+                            })
+                            .catch(e => { reject(e) })
+                    })
+                })
+            )
+            return imgIdArray
+        }
+        else {
+            try {
+                const randId = uuid()
+                const imgId = await cloudinary.uploader.upload(fileList, { public_id: randId })
+                console.log('uploaded', randId)
+                return [...imgId.public_id]
+            } catch (e) {
+                console.log('e', e)
+            }
+        }
+    }
+
     //catching data from front end to these attributes
-    const { name, fromLocation, toLocation, description, transportMode, price, date } = req.body;
+    if (!req.body) return
+
+    //catching data from front end to these attributes
+    const { name, fromLocation, toLocation, description, transportMode, price, date, images } = req.body;
+
+    console.log('req.body?.images?.length', req?.body?.images?.length)
+
+    let CloudImgArr
+    try {
+        CloudImgArr = await uploadToCloudinary(req.body?.images)
+    } catch (error) {
+        console.log('error', error)
+    }
+
+    console.log('CloudImgArr', CloudImgArr)
+    console.log('done')
 
     //create a object to store saved data to save in the mongo db database
     const tour = new Tour({
@@ -14,7 +69,7 @@ const createTour = async (req, res) => {
         transportMode,
         price,
         date,
-        images: { type: [String] }
+        images: CloudImgArr
     });
 
     //sending created ticket object to the database 

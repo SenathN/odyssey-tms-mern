@@ -17,26 +17,18 @@ const Space = props => (
         </td>
         <td className='px-2 py-2 '> {props.space.location}</td>
         <td className='px-2 py-2'>{props.space.peopleCount}</td>
-        <td className='px-2 py-2'>{props.space.rate}</td>
+        <td className='px-2 py-2'>{parseFloat(props.space.rate)}</td>
 
         <td className='px-2 py-2'>
             <div className="flex justify-center">
                 <div className="">
-                    <button className='inline-flex items-center px-4 py-2 ml-1 text-sm font-medium text-white duration-100 bg-indigo-500 rounded-md hover:bg-blue-200' onClick={() => { props.gotoUpdateSpace(props.space._id) }}>
-                        <div className="">
-                            <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round " stroke-width="2" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"></path>
-                            </svg>
-                        </div>
+                    <button className='inline-flex items-center p-2 ml-1 text-sm font-medium text-white duration-100 bg-indigo-500 rounded-md hover:bg-blue-200' onClick={() => { props.gotoUpdateSpace(props.space._id) }}>
+                        <i className='bi bi-pencil fs-4' />
                     </button>
                 </div>
                 <div className="">
-                    <button className='inline-flex items-center px-4 py-2 ml-1 text-sm font-medium text-white duration-100 bg-red-500 rounded-md hover:bg-red-200' onClick={() => { props.deleteSpace(props.space._id) }}>
-                        <div className="">
-                            <svg className="h-5 w-5 mr-2 " fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                        </div>
+                    <button className='inline-flex items-center p-2 ml-1 text-sm font-medium text-white duration-100 bg-red-500 rounded-md hover:bg-red-200' onClick={() => { props.deleteSpace(props.space._id) }}>
+                        <i className='bi bi-trash fs-4 ' />
                     </button>
                 </div>
             </div>
@@ -96,7 +88,7 @@ export class SpaceList extends Component {
                     text: 'The space has been removed!'
                 })
             })
-            .catch( e => {
+            .catch(e => {
                 console.log('e', e)
                 Swal.fire({
                     icon: 'danger',
@@ -122,7 +114,8 @@ export class SpaceList extends Component {
 
     searchSpaceList() {
         const searchedSpace = this.state.space.filter(space =>
-            space.location.toLowerCase().includes(this.state.searchSpace.toLowerCase())
+            space.location.toLowerCase().includes(this.state.searchSpace.toLowerCase()) ||
+            space.description.toLowerCase().includes(this.state.searchSpace.toLowerCase())
         )
 
         return searchedSpace.map(currentspace => {
@@ -143,7 +136,7 @@ export class SpaceList extends Component {
         const marginLeft = 40;
         const doc = new jsPDF(orientation, unit, size);
         const title = "Space List Report";
-        const headers = [["Name", "Description", "Location", "People count", "Payment rate"]];
+        const headers = [["Name", "Description", "Location", "People count", "Payment rate (LKR)"]];
         const space = this.state.space.map(
             Space => [
                 Space.name,
@@ -224,13 +217,13 @@ export class SpaceList extends Component {
                             </div>
                             <div className='relative grid content-start grid-cols-1 gap-4 overflow-x-auto shadow-md sm:rounded-lg'>
                                 <table className='w-full h-full overflow-y-auto text-sm text-left text-gray-500 table-fixed dark:text-black' >
-                                    <thead className='p-5 text-xs text-gray-700 uppercase border bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
+                                    <thead className='p-5 text-xs text-light uppercase border bg-gray-50 dark:bg-gray-700 '>
                                         <tr>
                                             <th className="p-2 border-black tbhead ">Space Name</th>
                                             <th className="p-2 tbhead">Description</th>
                                             <th className="p-2 tbhead">Location</th>
                                             <th className="p-2 tbhead">No. of People</th>
-                                            <th className="p-2 tbhead">Payment rate</th>
+                                            <th className="p-2 tbhead">Payment  (LKR)</th>
                                             <th className="p-2 tbhead">Actions</th>
                                         </tr>
                                     </thead>

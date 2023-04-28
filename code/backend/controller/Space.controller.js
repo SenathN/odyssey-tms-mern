@@ -4,9 +4,9 @@ const uuid = require('uuid').v4
 
 // Configuration 
 cloudinary.config({
-    cloud_name: "dsv6hvwxa",
-    api_key: "625585731364648",
-    api_secret: "fd1IcQjwOn7OzJfdnXBPrIk6MDc"
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME ,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
 //Create new space pack 

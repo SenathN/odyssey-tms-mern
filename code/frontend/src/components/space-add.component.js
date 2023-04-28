@@ -70,7 +70,6 @@ export class CreateSpace extends Component {
         e.preventDefault();
 
         const rawImages = this.state.images
-
         let b64files = []
 
         // convertion to base64
@@ -119,9 +118,8 @@ export class CreateSpace extends Component {
         await axios
             .post('http://localhost:5000/api/space/add', space)
             .then(async res => {
-                console.log(res);
                 if (res.status === 200) {
-                    this.clearData();
+                    // this.clearData();
                     Swal.fire({
                         icon: 'success',
                         title: 'Successful',
@@ -178,6 +176,7 @@ export class CreateSpace extends Component {
                                                 <div className="">
                                                     <label className='block mb-2 text-lg font-medium text-gray-900 dark:text-black'>Add Images : </label>
                                                     <input type="file"
+                                                    required
                                                         multiple
                                                         placeholder=''
                                                         className="form-control "

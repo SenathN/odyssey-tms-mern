@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import { Modal } from "react-bootstrap";
+import * as Swal from "sweetalert2";
+import { Carousel, Modal } from "react-bootstrap";
 import EditTour from "./tourpackage-edit.component";
+import Cloudinary_Image from '../features/cloudinaryAssests';
 
 export const Tour = props => (
     <tr className='text-lg bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'>
-        <div class="justify-between grid grid-cols-4 gap-2 p-5 m-5 shadow-xl shadow-slate-300 hover:shadow-lg hover:shadow-cyan-500-100 hover:duration-300 rounded-lg max-w-sm lg:max-w-full lg:flex">
+        <div class="justify-between grid grid-cols-4 gap-1 p-3 m-1 shadow-xl shadow-slate-300 hover:shadow-lg hover:shadow-cyan-500-100 hover:duration-300 rounded-lg max-w-sm lg:max-w-full lg:flex">
             <div class="col-span-3">
                 <div class="">
                     <div class=" border-gray-400 bg-white flex flex-col">
@@ -38,7 +40,7 @@ export const Tour = props => (
                                     </p>
                                 </p>
 
-                                <p class="flex text-gray-900  text-xl"> Tour Price (Per person) : <p className='ml-2 text-lg font-bold'>LKR: {props.tour.price} </p></p>
+                                <p class="flex text-gray-900  text-xl"> Tour Price (Per person) : <p className='ml-2 text-lg font-bold'>{props.tour.price} LKR</p></p>
 
                             </div>
                             <div class="text-gray-900 font-thin text-base">
@@ -52,32 +54,42 @@ export const Tour = props => (
                             </div>
                         </div>
                     </div>
+                    <div class="col-span-1">
+                        <div class="flex mt-1 justify-end ">
+                            <div class="">
+                                <button className='items-center px-2 py-2 text-sm font-medium text-white duration-100 bg-indigo-500 rounded-full hover:bg-blue-200' onClick={() => { props.gotoUpdateTour(props.tour._id) }}>
+                                    <div class="ml-2">
+                                        <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round " stroke-width="2" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"></path>
+                                        </svg>
+                                    </div>
+                                </button>
+                            </div>
+                            <div class="">
+                                <button className='items-center px-2 py-2 ml-2 text-sm font-medium text-white duration-100 bg-red-500 rounded-full shadow-lg shadow-black hover:bg-red-200'
+                                    onClick={() => { props.deleteTour(props.tour._id) }}
+                                >
+                                    <div class="ml-2">
+                                        <svg class="h-5 w-5 mr-2 " fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-span-1">
-                <div class="flex mt-1 justify-end ">
-                    <div class="">
-                        <button className='items-center px-2 py-2 text-sm font-medium text-white duration-100 bg-indigo-500 rounded-full hover:bg-blue-200' onClick={() => { props.gotoUpdateTour(props.tour._id) }}>
-                            <div class="ml-2">
-                                <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round " stroke-width="2" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"></path>
-                                </svg>
-                            </div>
-                        </button>
-                    </div>
-                    <div class="">
-                        <button className='items-center px-2 py-2 ml-2 text-sm font-medium text-white duration-100 bg-red-500 rounded-full shadow-lg shadow-black hover:bg-red-200'
-                            onClick={() => { props.deleteTour(props.tour._id) }}
-                        >
-                            <div class="ml-2">
-                                <svg class="h-5 w-5 mr-2 " fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                            </div>
-                        </button>
-                    </div>
-                </div>
+            <div className='col-span-3'>
+                <Carousel>
+                    {props.tour?.images?.length > 0 && props.tour.images.map(imgId =>
+                        <Carousel.Item interval={5000}>
+                            <Cloudinary_Image public_id={imgId.toString()} />
+                        </Carousel.Item>
+                    )}
+                </Carousel>
             </div>
+
         </div >
     </tr>
 )
@@ -126,9 +138,20 @@ export class TourPackageList extends Component {
     deleteTour(id) {
         axios.delete('http://localhost:5000/api/tour/' + id)
             .then(res => {
-                console.log(res);
-                alert("Deleted");
-            });
+                // console.log(res);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Successful',
+                    text: 'The space has been removed!'
+                })
+            })
+            .catch(e => {
+                // console.log('e', e)
+                Swal.fire({
+                    icon: 'danger',
+                    title: 'Delete failed'
+                })
+            })
 
         this.setState({
             tour: this.state.tour.filter(el => el._id !== id)
@@ -146,6 +169,26 @@ export class TourPackageList extends Component {
         })
     }
 
+    searchTourList() {
+        const searchedTour = this.state.tour.filter(tour =>
+            tour.name.toLowerCase().includes(this.state.searchTour.toLowerCase()) ||
+            tour.toLocation.toLowerCase().includes(this.state.searchTour.toLowerCase()) ||
+            tour.fromLocation.toLowerCase().includes(this.state.searchTour.toLowerCase()) ||
+            tour.description.toLowerCase().includes(this.state.searchTour.toLowerCase())
+        )
+        if (searchedTour?.length == 0)
+            return <h2 className='display-6 text-center'>No search results</h2>
+
+        return searchedTour.map(currenttour => {
+            return <Tour
+                tour={currenttour}
+                deleteTour={this.deleteTour}
+                gotoUpdateTour={this.gotoUpdateTour}
+                key={currenttour._id}
+            />;
+        })
+    }
+    /*
     searchTourList() {
         return this.state.tour.map((currenttour) => {
             if (
@@ -219,7 +262,12 @@ export class TourPackageList extends Component {
                                                         "http://localhost:5000/api/tour/" + currenttour._id
                                                     )
                                                     .then(() => {
-                                                        alert("Tour Package delete Success");
+                                                        Swal.fire({
+                                                            icon: 'success',
+                                                            title: 'Successful',
+                                                            text: 'The space has been removed!'
+                                                        })
+                                                        // alert("Tour Package delete Success");
                                                         //Get data again after delete
                                                         axios
                                                             .get("http://localhost:5000/api/tour")
@@ -251,6 +299,7 @@ export class TourPackageList extends Component {
             }
         });
     }
+    */
     /*
         name,
         fromLocation,

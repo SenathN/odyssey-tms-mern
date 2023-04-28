@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-// import * as Swal from "sweetalert2";
+import * as Swal from "sweetalert2";
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -14,6 +14,7 @@ export class CreateTour extends Component {
         this.onChangeTransportMode = this.onChangeTransportMode.bind(this);
         this.onChangePrice = this.onChangePrice.bind(this);
         this.onChangeDate = this.onChangeDate.bind(this);
+        this.handleImgsUploads = this.handleImgsUploads.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.state = {
             name: '',
@@ -22,6 +23,7 @@ export class CreateTour extends Component {
             description: '',
             transportMode: '',
             price: '',
+            images: '',
             date: new Date(),
         }
     }
@@ -62,6 +64,21 @@ export class CreateTour extends Component {
             date: date
         });
     }
+
+    async handleImgsUploads(e) {
+
+        //getting images into a object
+        const imgs = [...e?.target?.files]
+        if (!imgs) return
+        console.log(imgs)
+
+        this.setState({
+            images: imgs
+        })
+
+        console.log(this.state.images)
+    }
+
     /*
         name,
         fromLocation,
@@ -71,8 +88,41 @@ export class CreateTour extends Component {
         price,
         date,
 */
-    onSubmit(e) {
+    async onSubmit(e) {
         e.preventDefault();
+
+        const rawImages = this.state.images
+        let b64files = []
+
+        // convertion to base64
+        async function getb64FileList(fileList) {
+            function getb64(file) {
+                const fileReader = new FileReader();
+                return new Promise((resolve, reject) => {
+                    fileReader.readAsDataURL(file);
+                    fileReader.onload = () => {
+                        resolve(fileReader.result);
+                    };
+                    fileReader.onerror = (error) => {
+                        reject(error);
+                    };
+                });
+            }
+
+            console.log('b64files', typeof b64files)
+            console.log('fileList', typeof fileList)
+            if (Array.isArray(fileList))
+                await Promise.all(
+                    fileList.map(async file =>
+                        b64files.push(await getb64(file))
+                    )
+                )
+            else return []
+        }
+
+        await getb64FileList(rawImages)
+
+
         const tour = {
             name: this.state.name,
             fromLocation: this.state.fromLocation,
@@ -81,31 +131,32 @@ export class CreateTour extends Component {
             transportMode: this.state.transportMode,
             price: this.state.price,
             date: this.state.date,
+            images: b64files
         }
         console.log(tour);
+
+        Swal.fire({
+            icon: 'info',
+            title: 'Creating tour ',
+            text: 'Please wait...',
+        })
+
         axios.post('http://localhost:5000/api/tour/add', tour)
             .then(res => {
-                console.log(res);
-                // if (res.status === 200) {
-                //     this.clearData();
-                //     Swal.fire({
-                //         icon: 'success',
-                //         title: 'Successful',
-                //         text: 'Tour Package has been added!!',
-                //         background: '#fff',
-                //         confirmButtonColor: '#133EFA',
-                //         iconColor: '#60e004'
-                //     })
-                // } else {
-                //     Swal.fire({
-                //         icon: 'error',
-                //         title: 'Error',
-                //         text: 'Error in adding!',
-                //         background: '#fff',
-                //         confirmButtonColor: '#133EFA',
-                //         iconColor: '#e00404'
-                //     })
-                // }
+                if (res.status === 200) {
+                    this.clearData();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Successful',
+                        text: 'Space has been placed!',
+                    })
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'We faced a problem',
+                        text: 'Coudn\'t create the space',
+                    })
+                }
             })
     }
 
@@ -222,7 +273,17 @@ export class CreateTour extends Component {
                                                         value={this.state.price}
                                                         onChange={this.onChangePrice}
                                                     />
-                                                </div><p />
+                                                </div>
+                                            </div>
+                                            <div className="form-group mb-3">
+                                                <label for="large-input" className='block mb-2 text-lg font-medium text-gray-900 dark:text-black'>Upload images : </label>
+                                                <input type='file'
+                                                    required
+                                                    multiple
+                                                    placeholder=''
+                                                    className="form-control"
+                                                    onChange={this.handleImgsUploads}
+                                                />
                                             </div>
 
                                             <div className="text-center align-middle form-group">
