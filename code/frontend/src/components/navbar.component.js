@@ -5,22 +5,19 @@ function navbar() {
   return (
     <div>
       <nav className="flex flex-col w-full px-6 py-4 bg-white shadow sm:flex-row sm:text-left sm:justify-between sm:items-baseline">
-        <div className="mb-2 sm:mb-0">
-          <a href="/home" className="text-xl no-underline duration-300 text-grey-darkest hover:text-blue-dark hover:font-bold">Home</a>
-        </div>
-        <div className='text-lg font-light hover:text-blue-dark'>
-          <Link to={"/customerTicket"} className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">Airticket Customer</Link>
-          <Link to={"/ticket"} className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">ATC.Admin</Link>
-          <Link to={"/tour"} className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">TourPackages</Link>
-          <Link to={"/adTourPackageList"} className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">TP.Admin</Link>
-          <Link to={"/guide"} className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">Guides</Link>
-          <Link to={"/guidePack"} className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">Guide Packs</Link>
-          <Link to={"/guidePackAdmin"} className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">Ad.Guide Packs</Link>
-          <Link to={"/inquiry"} className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">Inquiry</Link>
-          <Link to={"/adInquiry"} className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">Ad.Inquiry</Link>
-          <Link to={"/spaceProvider"} className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">Space Providers</Link>
-          <Link to={"/space"} className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">Spaces</Link>
-          <Link to={"/user"} className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">users</Link>
+        <div className='row text-lg font-light hover:text-blue-dark'>
+          <div className="col"><Link to={"/customerTicket"} className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">Airticket Customer</Link></div>
+          <div className="col"><Link to={"/ticket"} className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">ATC.Admin</Link></div>
+          <div className="col"><Link to={"/tour"} className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">TourPackages</Link></div>
+          <div className="col"><Link to={"/adTourPackageList"} className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">TP.Admin</Link></div>
+          <div className="col"><Link to={"/guide"} className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">Guides</Link></div>
+          <div className="col"><Link to={"/guidePack"} className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">Guide Packs</Link></div>
+          <div className="col"><Link to={"/guidePackAdmin"} className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">Ad.Guide Packs</Link></div>
+          <div className="col"><Link to={"/inquiry"} className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">Inquiry</Link></div>
+          <div className="col"><Link to={"/adInquiry"} className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">Ad.Inquiry</Link></div>
+          <div className="col"><Link to={"/spaceProvider"} className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">Space Providers</Link></div>
+          <div className="col"><Link to={"/space"} className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">Spaces</Link></div>
+          <div className="col"><Link to={"/user"} className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">users</Link></div>
           {/* <a href="/#" className="m-2 text-black no-underline duration-300 hover:text-blue-800 hover:font-normal">SampleData</a> */}
         </div>
         <div className="grid grid-cols-2 gap-1">

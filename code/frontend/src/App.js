@@ -49,7 +49,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Layout />} >
-            <Route path='/home' element={<Home />} />
+            <Route index element={<Home />} />
             <Route path='/signup' element={<SignUp />} />
             <Route path='/signin' element={<Login />} />
 
