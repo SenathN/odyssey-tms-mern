@@ -43,6 +43,8 @@ import Login from './features/Login';
 import DashLayout from './features/DashLayout'
 import DashBoard from './features/DashBoard'
 import TourPage from './components/tour-page.component';
+import SpaceBrowse from './components/space-browse.component';
+import TourBrowse from './components/tour-browse.component';
 
 function App() {
   return (
@@ -69,6 +71,13 @@ function App() {
             <Route path='/tour' >
               <Route index element={<TourPackageList />} />
               <Route path=':_id' element={<TourPage />} />
+              <Route path='browse' element={<TourBrowse />} />
+            </Route>
+
+            <Route path='/space' >
+              <Route index element={<SpaceList />} />
+              <Route path=':_id' element={<SpacePage />} />
+              <Route path='browse' element={<SpaceBrowse />} />
             </Route>
 
             <Route exact path="/createTour" element={<CreateTour />} />
@@ -80,11 +89,6 @@ function App() {
 
             <Route exact path="/spaceProvider" element={<SpaceProviderList />} />
             <Route exact path="/createSpaceProvider" element={<CreateSpaceProvider />} />
-
-            <Route path='/space' >
-              <Route index element={<SpaceList />} />
-              <Route path=':_id' element={<SpacePage />} />
-            </Route>
 
             <Route exact path="/createSpace" element={<CreateSpace />} />
 

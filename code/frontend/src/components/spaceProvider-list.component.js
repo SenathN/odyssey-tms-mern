@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-// import Swal from "sweetalert2";
+import Swal from "sweetalert2";
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { Modal } from "react-bootstrap";
@@ -98,31 +98,31 @@ export class SpaceProviderList extends Component {
 
         axios.delete('http://localhost:5000/api/spaceProvider/' + id).then(response => {
             console.log(response.status)
-            // this.refreshTable();
+            this.refreshTable();
 
-            // if (response.status == 200) {
-            //     Swal.fire({
-            //         icon: 'success',
-            //         title: 'Successful',
-            //         text: "SpaceProvider has been deleted!!",
-            //         background: '#fff',
-            //         confirmButtonColor: '#0a5bf2',
-            //         iconColor: '#60e004'
-            //     })
+            if (response.status == 200) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Successful',
+                    text: "SpaceProvider has been deleted!!",
+                    background: '#fff',
+                    confirmButtonColor: '#0a5bf2',
+                    iconColor: '#60e004'
+                })
 
-            //     this.refreshList();
-            // }
+                this.refreshList();
+            }
 
-            // else {
-            //     Swal.fire({
-            //         icon: 'Unsuccess',
-            //         title: 'Unsuccessfull',
-            //         text: "SpaceProvider has not been deleted!!",
-            //         background: '#fff',
-            //         confirmButtonColor: '#eb220c',
-            //         iconColor: '#60e004'
-            //     })
-            // }
+            else {
+                Swal.fire({
+                    icon: 'Unsuccess',
+                    title: 'Unsuccessfull',
+                    text: "SpaceProvider has not been deleted!!",
+                    background: '#fff',
+                    confirmButtonColor: '#eb220c',
+                    iconColor: '#60e004'
+                })
+            }
 
 
         })
@@ -137,60 +137,19 @@ export class SpaceProviderList extends Component {
     }
 
     searchSpaceProviderList() {
-        return this.state.spaceProvider.map((currentspaceProvider) => {
-            if (
-                // this.state.searchSpaceProvider == currentspaceProvider.username
-                this.state.searchSpaceProvider === currentspaceProvider.username || currentspaceProvider.username.toLowerCase().includes(this.state.searchSpaceProvider.toLowerCase())
-                
-            ) {
-                return (
-                    <tr className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'>
-                        <td className='px-6 py-4'>{currentspaceProvider.username}</td>
-                        <td className='px-6 py-4'>{currentspaceProvider.nic}</td>
-                        <td className='px-6 py-4'>{currentspaceProvider.address}</td>
-                        <td className='px-6 py-4'>{currentspaceProvider.company}</td>
-                        <td className='px-6 py-4'>{currentspaceProvider.email}</td>
-                        <td className='px-6 py-4'>{currentspaceProvider.langType}</td>
-                        <td className='px-6 py-4'>{currentspaceProvider.telNo}</td>
-                        <td className='flex justify-center px-6 py-4 '>
-                            {
-                                <div className="">
-                                    <button className='inline-flex items-center px-4 py-2 mr-1 text-sm font-medium text-white bg-indigo-500 rounded-md hover:bg-blue-200' onClick={() => { this.gotoUpdateSpaceProvider(currentspaceProvider._id) }}>
+        const searchedSpaceProvider = this.state.spaceProvider.filter(spaceProvider =>
+            spaceProvider.username?.toLowerCase().includes(this.state.searchSpaceProvider?.toLowerCase()) ||
+            spaceProvider.email?.toLowerCase().includes(this.state.searchSpaceProvider?.toLowerCase())
+        )
 
-                                        <div className=" grid grid-cols-2 gap-1">
-                                            <div className="">
-                                                <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round " stroke-width="2" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"></path>
-                                                </svg>
-                                            </div>
-                                        </div>
-
-                                    </button>
-                                </div>
-                            }
-                            {"  "}
-                            {
-                                <div className="">
-                                    <button className='inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-md hover:bg-red-200'
-                                        onClick={() => {
-                                            //Delete the selected record
-                                            this.deleteSpaceProvider(currentspaceProvider._id);
-                                        }}>
-                                        <div className=" grid grid-cols-2 gap-1">
-                                            <div className="">
-                                                <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </button>
-                                </div>
-                            }
-                        </td>
-                    </tr>
-                );
-            }
-        });
+        return searchedSpaceProvider.map(currentspaceProvider => {
+            return <SpaceProvider
+                spaceProvider={currentspaceProvider}
+                deleteSpaceProvider={this.deleteSpaceProvider}
+                gotoUpdateSpaceProvider={this.gotoUpdateSpaceProvider}
+                key={currentspaceProvider._id}
+            />;
+        })
     }
 
 

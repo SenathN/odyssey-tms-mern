@@ -75,8 +75,8 @@ const Header = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ml-auto">
-              <Nav.Link href="/space" className="my-auto">Hotels</Nav.Link>
-              <Nav.Link href="/tour" className="my-auto">Tours</Nav.Link>
+              <Nav.Link href="/space/browse" className="my-auto">Hotels</Nav.Link>
+              <Nav.Link href="/tour/browse" className="my-auto">Tours</Nav.Link>
               <Nav.Link href="/ticket" className="my-auto">Flights</Nav.Link>
               {accountButton}
               <NavDropdown id="basic-nav-dropdown" className="my-auto">
