@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { CreateUser } from '../components/user-add.component'
 import { ServiceSignUp } from './ServiceSignUp'
+import { Link } from 'react-router-dom'
 
 const SignUp = () => {
   const login = { freelancer: 'freelancer', customer: 'customer' }
@@ -25,6 +26,10 @@ const SignUp = () => {
         </div>
       </div >
       <div className='container-fluid text-dark mx-auto' style={{ minWidth: '30em' }} >
+        <p className='text-center my-3'> Already have an account? <Link to={'/signin'}>
+            Sign in
+          </Link>.
+        </p>
         {loginMode === login.customer && <CreateUser />}
         {loginMode === login.freelancer && <ServiceSignUp />}
       </div>

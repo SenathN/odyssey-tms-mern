@@ -6,7 +6,7 @@ const {
     deleteUser,
     getUserById,
     getUser,
-    updateUser
+    updateUser,
 } = require("../controller/user.controller");
 
 //@route  POST api/User Package
@@ -28,5 +28,6 @@ router.get("/", getUser);
 //@route  PUT api/User Package
 //@desc   update User Package record
 router.put("/:id", updateUser);
+
 
 module.exports = router;

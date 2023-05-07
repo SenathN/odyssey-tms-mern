@@ -119,7 +119,7 @@ export class CreateSpace extends Component {
             .post('http://localhost:5000/api/space/add', space)
             .then(async res => {
                 if (res.status === 200) {
-                    // this.clearData();
+                    this.clearData();
                     Swal.fire({
                         icon: 'success',
                         title: 'Successful',

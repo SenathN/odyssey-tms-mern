@@ -29,6 +29,8 @@ async function connectMongoDB() {
 
 app.use('/uploads', express.static("uploads"))
 
+app.use('/api/auth', require('./route/auth.route'))
+
 app.use('/api/ticket', require('./route/ticket.route'));
 app.use('/api/tour', require('./route/tour.route'));
 app.use('/api/inquiry', require('./route/inquiry.route'));

@@ -1,58 +1,144 @@
-import { Link } from 'react-router-dom'
-import React from 'react'
+import React, { useEffect, useState } from "react";
+import ReactDOM from "react-dom/client";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import NavDropdown from "react-bootstrap/NavDropdown";
+import Cloudinary_Image from "./cloudinaryAssests";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const Header = () => {
-    return (
-        <header className='flex-item justify-content-between container-fluid border-bottom border-3'>
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                <div className="container-fluid">
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    <div className="collapse navbar-collapse text-center" id="navbarTogglerDemo01">
-                        <Link to='/' className='navbar-brand btn'>
-                            
-                        </Link>
-                        <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li className="nav-item">
-                                <Link className='nav-link btn'>Tours</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className='nav-link btn'>Hotels</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className='nav-link btn '>Flights</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className='nav-link btn '>About Us</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className='nav-link btn '>Gallery</Link>
-                            </li>
-                        </ul>
+  const [userSession, setUserSession] = useState(JSON.parse(localStorage.getItem("userSession")))
 
-                        {/* <Link to='/auth'
-                            className='btn btn-sm text-center fs-6'>
-                            Sign in
-                            <i alt='Profile' className='bi bi-person-circle img-fluid fs-3 m-2 align-middle' />
-                        </Link> */}
-                        <div className="grid grid-cols-2 gap-1">
-                            <div className="flex flex-col sm:flex-row sm:text-left sm:justify-between">
-                                <Link to={'/signup'}>
-                                    <button className="flex text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Sign Up</button>
-                                </Link>
-                            </div>
-                            <Link to={'/signin'}>
-                                <div className="flex flex-col sm:flex-row sm:text-left sm:justify-between">
-                                    <button className="flex text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Sign In</button>
-                                </div>
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </header >
-    )
-}
+  const [accountButton, setAccountButton] = useState(
+    <Nav.Link href="/signin"
+      className='btn btn-sm text-center fs-6'>
+      Sign in
+      <i alt='Profile' className='bi bi-person-circle img-fluid fs-3 m-2 align-middle' />
+    </Nav.Link>
+  )
 
-export default Header
+  useEffect(() => {
+    setUserSession(JSON.parse(localStorage.getItem("userSession")))
+
+    const fetchData = () => {
+      if (userSession) {
+        axios.get(`http://localhost:5000/api/user/${userSession?._id}`)
+          .then(res => {
+            setAccountButton(
+              <Nav.Link href="/signin"
+                className='btn btn-sm text-center fs-6'>
+                {res.data?.firstName} {res.data?.lastName}
+                <i alt='Profile' className='bi bi-person-circle img-fluid fs-3 m-2 align-middle' />
+              </Nav.Link>
+            )
+          })
+          .catch(e =>
+            console.log('e', e)
+          )
+      }
+    }
+    fetchData()
+  }, [])
+
+  const handleLogout = () => {
+    Swal.fire({
+      title: 'Are you sure you want to log out?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirm',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.clear()
+        setUserSession(null)
+        window.location.reload()
+      }
+    });
+  }
+
+  return (
+    <header>
+      <Navbar bg="light" expand="lg">
+        <Container className="text-center">
+          <Navbar.Brand href="/">
+            <Link to={"/"}>
+              <Cloudinary_Image public_id={"logo"} width="175" height="100">
+              </Cloudinary_Image>
+            </Link>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="ml-auto">
+              <Nav.Link href="/space" className="my-auto">Hotels</Nav.Link>
+              <Nav.Link href="/tour" className="my-auto">Tours</Nav.Link>
+              <Nav.Link href="/ticket" className="my-auto">Flights</Nav.Link>
+              {accountButton}
+              <NavDropdown id="basic-nav-dropdown" className="my-auto">
+
+                {/* function paths */}
+                <NavDropdown.Item href="/customerTicket">
+                  AirTicket Customer
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/ticket">
+                  Admin AirTicket Customer
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/tour">
+                  Tour Packages
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/adTourPackageList">
+                  TP.admin
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/guide">
+                  Guides
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/guidePack">
+                  Guide Pack
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/guidePackAdmin">
+                  Ad. Guide Pack
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/inquiry">
+                  Inquiry
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/adInquiry">
+                  Ad.Inquiry
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/spaceProvider">
+                  Space provider
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/space">
+                  Spaces
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/user">
+                  Users
+                </NavDropdown.Item>
+
+
+                <NavDropdown.Divider />
+                <NavDropdown.Item onClick={() => handleLogout()}>
+                  Log out
+                </NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+
+        <style>
+          {`
+      .dropdown-menu[data-bs-popper] {
+        left: -130px
+      }
+    `}
+        </style>
+      </Navbar>
+    </header>
+  );
+};
+
+export default Header;
