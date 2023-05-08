@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-// import * as Swal from "sweetalert2";
+import * as Swal from "sweetalert2";
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css"
 import { Link } from 'react-router-dom';
@@ -33,7 +33,7 @@ export default class EditUser extends Component {
     componentDidMount() {
         axios.get('http://localhost:5000/api/user/' + this.state.id)
             .then(response => {
-                console.log(this.props.ticketId);
+                console.log(this.props);
                 this.setState({
                     firstName: response.data.firstName,
                     lastName: response.data.lastName,
@@ -100,31 +100,31 @@ export default class EditUser extends Component {
 
         console.log(user);
 
-        axios.put('http://localhost:5000/api/user/' + this.state.id, user)
+        axios.put('http://localhost:5000/api/user/' +this.state.id , user)
             .then(res => {
                 console.log(res);
-                // if (res.status === 200) {
-                //     // this.refreshTable();
-                //     this.props.close();
-                //     Swal.fire({
-                //         icon: 'success',
-                //         title: 'Successful',
-                //         text: 'User details has been updated!',
-                //         background: '#fff',
-                //         confirmButtonColor: '#133EFA',
-                //         iconColor: '#60e004'
-                //     })
+                if (res.status === 200) {
+                    // this.refreshTable();
+                    this.props.close();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Successful',
+                        text: 'User details has been updated!',
+                        background: '#fff',
+                        confirmButtonColor: '#133EFA',
+                        iconColor: '#60e004'
+                    })
 
-                // } else {
-                //     Swal.fire({
-                //         icon: 'error',
-                //         title: 'Error',
-                //         text: 'There was an error updating Your User!',
-                //         background: '#fff',
-                //         confirmButtonColor: '#133EFA',
-                //         iconColor: '#e00404'
-                //     })
-                // }
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'There was an error updating Your User!',
+                        background: '#fff',
+                        confirmButtonColor: '#133EFA',
+                        iconColor: '#e00404'
+                    })
+                }
             })
     }
     render() {
@@ -133,95 +133,97 @@ export default class EditUser extends Component {
                 <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
                         <div className='items-center overflow-hidden'>
-                            <div className="">
-                                <p className='text-4xl font-semibold text-black uppercase drop-shadow-lg'>
-                                    Add user
-                                </p>
-                                <div className="grid grid-cols-2 gap-4 form-group">
+                            <form className='rounded-lg ' onSubmit={this.onSubmit}>
+                                <div className="">
+                                    <p className='text-4xl font-semibold text-black uppercase drop-shadow-lg'>
+                                        Add user
+                                    </p>
+                                    <div className="grid grid-cols-2 gap-4 form-group">
 
-                                    <div className="">
-                                        <label className='block mb-2 text-lg font-medium text-gray-900 dark:text-black'>First Name </label>
-                                        <input type="text"
-                                            required
-                                            placeholder=''
-                                            className="form-control "
-                                            value={this.state.firstName}
-                                            onChange={this.onChangeFirstName}
-                                        /><br />
-                                    </div>
-                                    <div className="form-group">
-                                        <label className='block mb-2 text-lg font-medium text-gray-900 dark:text-black'>Last Name</label>
-                                        <input type="text"
-                                            required
-                                            placeholder=''
-                                            className="form-control"
-                                            value={this.state.lastName}
-                                            onChange={this.onChangeLastName}
-                                        /><br />
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-4 form-group">
-                                    <div className="">
-                                        <label className='block mb-2 text-lg font-medium text-gray-900 dark:text-black' >NIC number</label>
-                                        <div>
+                                        <div className="">
+                                            <label className='block mb-2 text-lg font-medium text-gray-900 dark:text-black'>First Name </label>
+                                            <input type="text"
+                                                required
+                                                placeholder=''
+                                                className="form-control "
+                                                value={this.state.firstName}
+                                                onChange={this.onChangeFirstName}
+                                            /><br />
+                                        </div>
+                                        <div className="form-group">
+                                            <label className='block mb-2 text-lg font-medium text-gray-900 dark:text-black'>Last Name</label>
                                             <input type="text"
                                                 required
                                                 placeholder=''
                                                 className="form-control"
-                                                value={this.state.nic}
-                                                onChange={this.onChangeNIC}
+                                                value={this.state.lastName}
+                                                onChange={this.onChangeLastName}
                                             /><br />
                                         </div>
                                     </div>
-                                    <div className="form-group">
-                                        <label for="large-input" className='block mb-2 text-lg font-medium text-gray-900 dark:text-black'>Email</label>
-                                        <input textarea="text"
-                                            required
-                                            placeholder=''
-                                            className="form-control"
-                                            value={this.state.email}
-                                            onChange={this.onChangeEmail}
-                                        /><br />
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-4 form-group">
-                                    <div className="form-group">
-                                        <label className='block mb-2 text-lg font-medium text-gray-900 dark:text-black'>Languages</label>
-                                        <input textarea="text"
-                                            required
-                                            placeholder=''
-                                            className="form-control"
-                                            value={this.state.langType}
-                                            onChange={this.onChangeLangType}
-                                        /><br />
-                                    </div>
                                     <div className="grid grid-cols-2 gap-4 form-group">
+                                        <div className="">
+                                            <label className='block mb-2 text-lg font-medium text-gray-900 dark:text-black' >NIC number</label>
+                                            <div>
+                                                <input type="text"
+                                                    required
+                                                    placeholder=''
+                                                    className="form-control"
+                                                    value={this.state.nic}
+                                                    onChange={this.onChangeNIC}
+                                                /><br />
+                                            </div>
+                                        </div>
                                         <div className="form-group">
-                                            <label className='block mb-2 text-lg font-medium text-gray-900 dark:text-black'>Mobile number</label>
+                                            <label for="large-input" className='block mb-2 text-lg font-medium text-gray-900 dark:text-black'>Email</label>
                                             <input textarea="text"
                                                 required
                                                 placeholder=''
                                                 className="form-control"
-                                                value={this.state.telNo}
-                                                onChange={this.onChangeTelNo}
+                                                value={this.state.email}
+                                                onChange={this.onChangeEmail}
                                             /><br />
                                         </div>
-                                    </div><br />
-                                    <div className="form-group">
-                                        <label className='block mb-2 text-lg font-medium text-gray-900 dark:text-black'>Password</label>
-                                        <input textarea="text"
-                                            required
-                                            placeholder=''
-                                            className="form-control"
-                                            value={this.state.password}
-                                            onChange={this.onChangePassword}
-                                        /><br />
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4 form-group">
+                                        <div className="form-group">
+                                            <label className='block mb-2 text-lg font-medium text-gray-900 dark:text-black'>Languages</label>
+                                            <input textarea="text"
+                                                required
+                                                placeholder=''
+                                                className="form-control"
+                                                value={this.state.langType}
+                                                onChange={this.onChangeLangType}
+                                            /><br />
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-4 form-group">
+                                            <div className="form-group">
+                                                <label className='block mb-2 text-lg font-medium text-gray-900 dark:text-black'>Mobile number</label>
+                                                <input textarea="text"
+                                                    required
+                                                    placeholder=''
+                                                    className="form-control"
+                                                    value={this.state.telNo}
+                                                    onChange={this.onChangeTelNo}
+                                                /><br />
+                                            </div>
+                                        </div><br />
+                                        <div className="form-group">
+                                            <label className='block mb-2 text-lg font-medium text-gray-900 dark:text-black'>Password</label>
+                                            <input textarea="text"
+                                                required
+                                                placeholder=''
+                                                className="form-control"
+                                                value={this.state.password}
+                                                onChange={this.onChangePassword}
+                                            /><br />
+                                        </div>
+                                    </div>
+                                    <div className="text-center align-middle form-group">
+                                        <input className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800' type="submit" value="Add User" />
                                     </div>
                                 </div>
-                                <div className="text-center align-middle form-group">
-                                    <input className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800' type="submit" value="Add User" />
-                                </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>

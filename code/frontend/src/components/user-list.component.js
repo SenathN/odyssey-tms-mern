@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-// import Swal from "sweetalert2";
+import Swal from "sweetalert2";
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { Modal } from "react-bootstrap";
@@ -97,31 +97,31 @@ export class UserList extends Component {
 
         axios.delete('http://localhost:5000/api/user/' + id).then(response => {
             console.log(response.status)
-            // this.refreshTable();
+            this.refreshTable();
 
-            // if (response.status == 200) {
-            //     Swal.fire({
-            //         icon: 'success',
-            //         title: 'Successful',
-            //         text: "User has been deleted!!",
-            //         background: '#fff',
-            //         confirmButtonColor: '#0a5bf2',
-            //         iconColor: '#60e004'
-            //     })
+            if (response.status == 200) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Successful',
+                    text: "User has been deleted!!",
+                    background: '#fff',
+                    confirmButtonColor: '#0a5bf2',
+                    iconColor: '#60e004'
+                })
 
-            //     this.refreshList();
-            // }
+                this.refreshList();
+            }
 
-            // else {
-            //     Swal.fire({
-            //         icon: 'Unsuccess',
-            //         title: 'Unsuccessfull',
-            //         text: "User has not been deleted!!",
-            //         background: '#fff',
-            //         confirmButtonColor: '#eb220c',
-            //         iconColor: '#60e004'
-            //     })
-            // }
+            else {
+                Swal.fire({
+                    icon: 'Unsuccess',
+                    title: 'Unsuccessfull',
+                    text: "User has not been deleted!!",
+                    background: '#fff',
+                    confirmButtonColor: '#eb220c',
+                    iconColor: '#60e004'
+                })
+            }
 
 
         })

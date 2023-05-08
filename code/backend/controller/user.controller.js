@@ -56,15 +56,17 @@ const getUser = async (req, res) => {
 
 //Update Exsisting Ticket record
 const updateUser = async (req, res) => {
+    console.log('upd')
     User.findByIdAndUpdate(req.params.id).
         then((exsistingUser) => {
-            exsistingUser.firstName = req.body.username;
-            exsistingUser.lastName = req.body.company;
+            exsistingUser.firstName = req.body.firstName;
+            exsistingUser.lastName = req.body.lastname;
             exsistingUser.nic = req.body.nic;
             exsistingUser.email = req.body.email;
             exsistingUser.langType = req.body.langType;
             exsistingUser.telNo = req.body.telNo;
 
+            console.log('req.body', req.body)
             if (req.body?.password)
                 exsistingUser.password = req.body.password;
 
